@@ -123,19 +123,22 @@ class MetroAgi:
         }
 
         # Ortak istasyonlari belirleme
-        aktarma_noktalari = set()
         for istasyon in self.istasyonlar.values():
             if istasyon.ad not in G:
                 G.add_node(istasyon.ad, label=istasyon.ad, hat=istasyon.hat)
+
+        tum_sureler = [sure for istasyon in self.istasyonlar.values() for _, sure in istasyon.komsular]
+        min_sure, max_sure = min(tum_sureler), max(tum_sureler)
 
         # Bağlantilari ekleme
         for istasyon in self.istasyonlar.values():
             for komsu, sure in istasyon.komsular:
                 if istasyon.hat == komsu.hat:
-                    G.add_edge(istasyon.ad, komsu.ad, weight=sure, color=hat_renkleri[istasyon.hat])
+                    weight = 1 + (9 - (sure - min_sure) / (max_sure - min_sure) * 8) #Ağırlık normalizasyonu
+                    G.add_edge(istasyon.ad, komsu.ad, weight=weight, original_sure=sure, color=hat_renkleri[istasyon.hat])
 
         # Grafik çizim ayarlari
-        pos = nx.spring_layout(G, seed=23, k=0.1, iterations=50)
+        pos = nx.spring_layout(G, seed=22, k=0.32, iterations=100)
         edge_colors = [G[u][v]["color"] for u, v in G.edges]
 
         # Çizim
@@ -144,7 +147,7 @@ class MetroAgi:
         nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=5)
         nx.draw_networkx_nodes(G, pos, node_size=100, node_color="white", alpha=1, linewidths=2, edgecolors="black")
 
-        edge_labels = {(u, v): f"{G[u][v]['weight']} dk" for u, v in G.edges}
+        edge_labels = {(u, v): f"{G[u][v]['original_sure']} dk" for u, v in G.edges}
         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8, font_color="black", bbox=dict(facecolor="white", edgecolor="none", alpha=0.7))
 
         # Pozisyonlari biraz yukariya taşimak için pos koordinatlarini değiştirelim
@@ -152,7 +155,7 @@ class MetroAgi:
         adjusted_pos = {node: (x - 0.02, y + 0.05) for node, (x, y) in pos.items()}
         for node, label in labels.items():
             x, y = adjusted_pos[node]
-            plt.text(x, y, label, fontsize=12, fontweight="bold", rotation=-80, horizontalalignment="center", verticalalignment="bottom")
+            plt.text(x, y, label, fontsize=10, fontweight="bold", rotation=-80, horizontalalignment="center", verticalalignment="bottom")
 
         # Başlik ve gösterim
         plt.title("Ankara Metro Hatti Haritasi", fontsize=12)
