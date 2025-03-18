@@ -1,3 +1,9 @@
+"""
+Author: Emre
+Date: 2025-03-17
+Description: This project is a metro network simulation developed as a final project for the Global AI Hub - Akbank Python for AI 
+Introduction Bootcamp. It calculates the fastest and least transfer routes using BFS and A algorithms.
+"""
 import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -32,19 +38,17 @@ class MetroAgi:
         istasyon2.komsu_ekle(istasyon1, sure)
     
     def en_az_aktarma_bul(self, baslangic_id: str, hedef_id: str) -> Optional[List[Istasyon]]:
-        """BFS algoritmasi kullanarak en az aktarmali rotayi bulur
-        
-        Bu fonksiyonu tamamlayin:
-        1. Başlangiç ve hedef istasyonlarin varliğini kontrol edin
-        2. BFS algoritmasini kullanarak en az aktarmali rotayi bulun
-        3. Rota bulunamazsa None, bulunursa istasyon listesi döndürün
-        4. Fonksiyonu tamamladiktan sonra, # TODO ve pass satirlarini kaldirin
-        
-        İpuçlari:
-        - collections.deque kullanarak bir kuyruk oluşturun, HINT: kuyruk = deque([(baslangic, [baslangic])])
-        - Ziyaret edilen istasyonlari takip edin
-        - Her adimda komşu istasyonlari keşfedin
-        """        
+        """
+        BFS algoritmas kullanarak en az aktarmal rotay bulur.
+
+        Args:
+            baslangic_id (str): Başlangç istasyonunun benzersiz tanmlaycs.
+            hedef_id (str): Hedef istasyonunun benzersiz tanmlaycs.
+
+        Returns:
+            Optional[List[Istasyon]]: Eğer rota bulunursa, başlangçtan hedefe olan en az aktarmal rotay 
+                                  (Istasyon listesini) döndürür; rota bulunamazsa None döndürür.
+        """       
         if baslangic_id not in self.istasyonlar or hedef_id not in self.istasyonlar:
             return None
         baslangic = self.istasyonlar[baslangic_id]
@@ -65,19 +69,17 @@ class MetroAgi:
         return None
 
     def en_hizli_rota_bul(self, baslangic_id: str, hedef_id: str) -> Optional[Tuple[List[Istasyon], int]]:
-        """A* algoritmasi kullanarak en hizli rotayi bulur
-        
-        Bu fonksiyonu tamamlayin:
-        1. Başlangiç ve hedef istasyonlarin varliğini kontrol edin
-        2. A* algoritmasini kullanarak en hizli rotayi bulun
-        3. Rota bulunamazsa None, bulunursa (istasyon_listesi, toplam_sure) tuple'i döndürün
-        4. Fonksiyonu tamamladiktan sonra, # TODO ve pass satirlarini kaldirin
-        
-        İpuçlari:
-        - heapq modülünü kullanarak bir öncelik kuyruğu oluşturun, HINT: pq = [(0, id(baslangic), baslangic, [baslangic])]
-        - Ziyaret edilen istasyonlari takip edin
-        - Her adimda toplam süreyi hesaplayin
-        - En düşük süreye sahip rotayi seçin
+        """
+        A* algoritmas kullanarak en hzl rotay bulur.
+
+        Args:
+            baslangic_id (str): Başlangç istasyonunun benzersiz tanmlaycs.
+            hedef_id (str): Hedef istasyonunun benzersiz tanmlaycs.
+
+        Returns:
+            Optional[Tuple[List[Istasyon], int]]: Eğer rota bulunursa, başlangçtan hedefe olan en hzl rotay 
+                                              (Istasyon listesini) ve toplam süreyi içeren bir tuple döndürür; 
+                                              rota bulunamazsa None döndürür.
         """
         if baslangic_id not in self.istasyonlar or hedef_id not in self.istasyonlar:
             return None
@@ -134,7 +136,7 @@ class MetroAgi:
         for istasyon in self.istasyonlar.values():
             for komsu, sure in istasyon.komsular:
                 if istasyon.hat == komsu.hat:
-                    weight = 1 + (9 - (sure - min_sure) / (max_sure - min_sure) * 8) #Ağırlık normalizasyonu
+                    weight = 1 + (9 - (sure - min_sure) / (max_sure - min_sure) * 8) #Ağrlk normalizasyonu
                     G.add_edge(istasyon.ad, komsu.ad, weight=weight, original_sure=sure, color=hat_renkleri[istasyon.hat])
 
         # Grafik çizim ayarlari
