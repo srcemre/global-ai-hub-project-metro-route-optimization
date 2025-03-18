@@ -39,14 +39,14 @@ class MetroAgi:
     
     def en_az_aktarma_bul(self, baslangic_id: str, hedef_id: str) -> Optional[List[Istasyon]]:
         """
-        BFS algoritmas kullanarak en az aktarmal rotay bulur.
+        BFS algoritmasi kullanarak en az aktarmali rotayi bulur.
 
         Args:
-            baslangic_id (str): Başlangç istasyonunun benzersiz tanmlaycs.
-            hedef_id (str): Hedef istasyonunun benzersiz tanmlaycs.
+            baslangic_id (str): Başlangiç istasyonunun benzersiz tanimlayicisi.
+            hedef_id (str): Hedef istasyonunun benzersiz tanimlayicisi.
 
         Returns:
-            Optional[List[Istasyon]]: Eğer rota bulunursa, başlangçtan hedefe olan en az aktarmal rotay 
+            Optional[List[Istasyon]]: Eğer rota bulunursa, başlangiçtan hedefe olan en az aktarmali rotayi 
                                   (Istasyon listesini) döndürür; rota bulunamazsa None döndürür.
         """       
         if baslangic_id not in self.istasyonlar or hedef_id not in self.istasyonlar:
@@ -70,14 +70,14 @@ class MetroAgi:
 
     def en_hizli_rota_bul(self, baslangic_id: str, hedef_id: str) -> Optional[Tuple[List[Istasyon], int]]:
         """
-        A* algoritmas kullanarak en hzl rotay bulur.
+        A* algoritmasi kullanarak en hizli rotayi bulur.
 
         Args:
-            baslangic_id (str): Başlangç istasyonunun benzersiz tanmlaycs.
-            hedef_id (str): Hedef istasyonunun benzersiz tanmlaycs.
+            baslangic_id (str): Başlangiç istasyonunun benzersiz tanimlayicisi.
+            hedef_id (str): Hedef istasyonunun benzersiz tanimlayicisi.
 
         Returns:
-            Optional[Tuple[List[Istasyon], int]]: Eğer rota bulunursa, başlangçtan hedefe olan en hzl rotay 
+            Optional[Tuple[List[Istasyon], int]]: Eğer rota bulunursa, başlangiçtan hedefe olan en hizli rotayi 
                                               (Istasyon listesini) ve toplam süreyi içeren bir tuple döndürür; 
                                               rota bulunamazsa None döndürür.
         """
@@ -136,7 +136,7 @@ class MetroAgi:
         for istasyon in self.istasyonlar.values():
             for komsu, sure in istasyon.komsular:
                 if istasyon.hat == komsu.hat:
-                    weight = 1 + (9 - (sure - min_sure) / (max_sure - min_sure) * 8) #Ağrlk normalizasyonu
+                    weight = 1 + (9 - (sure - min_sure) / (max_sure - min_sure) * 8) #Ağirlik normalizasyonu
                     G.add_edge(istasyon.ad, komsu.ad, weight=weight, original_sure=sure, color=hat_renkleri[istasyon.hat])
 
         # Grafik çizim ayarlari
